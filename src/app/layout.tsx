@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Capillary Calc',
-  description: 'Calculate optimal capillary tube dimensions for refrigeration systems.',
+  title: 'Calculadora Capilar',
+  description: 'Calcula las dimensiones óptimas del tubo capilar para sistemas de refrigeración.',
 };
 
 export default function RootLayout({
@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
         <Toaster />

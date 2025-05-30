@@ -32,8 +32,8 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
   return (
     <Card className="w-full shadow-lg">
       <CardHeader>
-        <CardTitle className="text-2xl">Input Parameters</CardTitle>
-        <CardDescription>Enter the details below to calculate capillary tube dimensions.</CardDescription>
+        <CardTitle className="text-2xl">Parámetros de Entrada</CardTitle>
+        <CardDescription>Ingresa los detalles a continuación para calcular las dimensiones del tubo capilar.</CardDescription>
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -45,17 +45,15 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
                 <FormItem>
                   <FormLabel className="flex items-center">
                     <Zap className="mr-2 h-5 w-5 text-primary" />
-                    Compressor Power (Watts)
+                    Potencia del Compresor (Vatios)
                   </FormLabel>
                   <FormControl>
                     <Input
                       type="number"
-                      placeholder="e.g., 150"
+                      placeholder="ej., 150"
                       {...field}
                       onChange={e => {
                         const value = e.target.value;
-                        // Allow clearing the input, which parseFloat would turn to NaN
-                        // Zod validation will catch empty or non-positive values
                         field.onChange(value === '' ? undefined : parseFloat(value));
                       }}
                       className="text-base"
@@ -72,12 +70,12 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
                 <FormItem>
                   <FormLabel className="flex items-center">
                     <FlaskConical className="mr-2 h-5 w-5 text-primary" />
-                    Refrigerant Type
+                    Tipo de Refrigerante
                   </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="text-base">
-                        <SelectValue placeholder="Select refrigerant" />
+                        <SelectValue placeholder="Selecciona refrigerante" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -99,21 +97,21 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
                 <FormItem>
                   <FormLabel className="flex items-center">
                     <ThermometerSnowflake className="mr-2 h-5 w-5 text-primary" />
-                    Selected Capillary Diameter (mm) (Optional)
+                    Diámetro de Capilar Seleccionado (mm) (Opcional)
                   </FormLabel>
                   <FormControl>
                     <Input
                       type="number"
-                      placeholder="e.g., 0.8"
+                      placeholder="ej., 0.8"
                       {...field}
-                      value={field.value === undefined ? '' : field.value} // Ensure value is never undefined for the input element
+                      value={field.value === undefined ? '' : field.value}
                       onChange={e => {
                         const value = e.target.value;
                         if (value === '') {
-                          field.onChange(undefined); // Inform react-hook-form it's undefined
+                          field.onChange(undefined); 
                         } else {
                           const numValue = parseFloat(value);
-                          field.onChange(isNaN(numValue) ? undefined : numValue); // Store number or undefined
+                          field.onChange(isNaN(numValue) ? undefined : numValue); 
                         }
                       }}
                       className="text-base"
@@ -121,7 +119,7 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
                     />
                   </FormControl>
                   <FormDesc>
-                    If you have a specific capillary tube diameter, enter it here. The AI will calculate the optimal length for it.
+                    Si tienes un diámetro de tubo capilar específico, ingrésalo aquí. La IA calculará la longitud óptima para él.
                   </FormDesc>
                   <FormMessage />
                 </FormItem>
@@ -133,10 +131,10 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Calculating...
+                  Calculando...
                 </>
               ) : (
-                'Calculate Dimensions'
+                'Calcular Dimensiones'
               )}
             </Button>
           </CardFooter>

@@ -22,8 +22,8 @@ export function ResultsDisplay({ results, inputs, isLoading }: ResultsDisplayPro
     return (
       <Card className="w-full shadow-lg">
         <CardHeader>
-          <CardTitle className="text-2xl">Calculation Results</CardTitle>
-          <CardDescription>Optimal dimensions will appear here.</CardDescription>
+          <CardTitle className="text-2xl">Resultados del Cálculo</CardTitle>
+          <CardDescription>Las dimensiones óptimas aparecerán aquí.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
@@ -57,7 +57,7 @@ export function ResultsDisplay({ results, inputs, isLoading }: ResultsDisplayPro
         <CardFooter>
           <Button className="w-full text-base py-6" disabled>
             <Download className="mr-2 h-5 w-5" />
-            Export Results
+            Exportar Resultados
           </Button>
         </CardFooter>
       </Card>
@@ -77,27 +77,27 @@ export function ResultsDisplay({ results, inputs, isLoading }: ResultsDisplayPro
   return (
     <Card className="w-full shadow-lg">
       <CardHeader>
-        <CardTitle className="text-2xl">Calculation Results</CardTitle>
-        <CardDescription>Dimensions based on your inputs.</CardDescription>
+        <CardTitle className="text-2xl">Resultados del Cálculo</CardTitle>
+        <CardDescription>Dimensiones basadas en tus entradas.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
           <h3 className="text-lg font-semibold mb-2 flex items-center">
             <ThermometerSnowflake className="mr-2 h-5 w-5 text-accent" />
-            Overall Optimal Dimensions
+            Dimensiones Óptimas Generales
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <h4 className="flex items-center text-sm font-medium text-muted-foreground mb-1">
                 <Ruler className="mr-2 h-4 w-4 text-primary" />
-                Optimal Length
+                Longitud Óptima
               </h4>
               <p className="text-xl font-semibold">{results.overallOptimal.lengthMeters.toFixed(3)} m</p>
             </div>
             <div>
               <h4 className="flex items-center text-sm font-medium text-muted-foreground mb-1">
                 <CircleDot className="mr-2 h-4 w-4 text-primary" />
-                Optimal Internal Diameter
+                Diámetro Interno Óptimo
               </h4>
               <p className="text-xl font-semibold">{results.overallOptimal.internalDiameterMillimeters.toFixed(2)} mm</p>
             </div>
@@ -110,20 +110,20 @@ export function ResultsDisplay({ results, inputs, isLoading }: ResultsDisplayPro
             <div>
               <h3 className="text-lg font-semibold mb-2 flex items-center">
                 <ThermometerSnowflake className="mr-2 h-5 w-5 text-accent" />
-                For Your Selected Diameter ({inputs.selectedCapillaryTubeInternalDiameterMillimeters.toFixed(2)} mm)
+                Para Tu Diámetro Seleccionado ({inputs.selectedCapillaryTubeInternalDiameterMillimeters.toFixed(2)} mm)
               </h3>
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <h4 className="flex items-center text-sm font-medium text-muted-foreground mb-1">
                     <CircleDot className="mr-2 h-4 w-4 text-primary" />
-                    Selected Internal Diameter
+                    Diámetro Interno Seleccionado
                   </h4>
                   <p className="text-xl font-semibold">{results.selectedDiameterCalculation.inputDiameterMillimeters.toFixed(2)} mm</p>
                 </div>
                 <div>
                   <h4 className="flex items-center text-sm font-medium text-muted-foreground mb-1">
                     <Ruler className="mr-2 h-4 w-4 text-primary" />
-                    Calculated Optimal Length
+                    Longitud Óptima Calculada
                   </h4>
                   <p className="text-xl font-semibold">{results.selectedDiameterCalculation.optimalLengthMeters.toFixed(3)} m</p>
                 </div>
@@ -136,7 +136,7 @@ export function ResultsDisplay({ results, inputs, isLoading }: ResultsDisplayPro
         <div>
           <h3 className="flex items-center text-lg font-semibold mb-1">
             <FileText className="mr-2 h-5 w-5 text-accent" />
-            Calculation Details
+            Detalles del Cálculo
           </h3>
           <p className="text-sm whitespace-pre-wrap bg-muted/50 p-3 rounded-md">{results.calculationDetails}</p>
         </div>
@@ -144,7 +144,7 @@ export function ResultsDisplay({ results, inputs, isLoading }: ResultsDisplayPro
       <CardFooter>
         <Button onClick={handleExport} className="w-full text-base py-6">
           <Download className="mr-2 h-5 w-5" />
-          Export Results
+          Exportar Resultados
         </Button>
       </CardFooter>
     </Card>

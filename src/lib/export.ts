@@ -7,44 +7,44 @@ export function exportCalculationResults(
   results: CalculateCapillaryTubeOutput
 ): void {
   let content = `
-Capillary Calc Results
-============================
+Resultados de Calculadora Capilar
+==================================
 
-Inputs:
--------
-Compressor Power: ${inputs.compressorPowerWatts} W
-Refrigerant Type: ${inputs.refrigerantType.toUpperCase()}
+Entradas:
+---------
+Potencia del Compresor: ${inputs.compressorPowerWatts} W
+Tipo de Refrigerante: ${inputs.refrigerantType.toUpperCase()}
 `;
 
   if (inputs.selectedCapillaryTubeInternalDiameterMillimeters) {
-    content += `User Selected Diameter: ${inputs.selectedCapillaryTubeInternalDiameterMillimeters.toFixed(2)} mm\n`;
+    content += `Diámetro Seleccionado por Usuario: ${inputs.selectedCapillaryTubeInternalDiameterMillimeters.toFixed(2)} mm\n`;
   }
 
   content += `
-Results:
---------
-Overall Optimal Dimensions:
-  Length: ${results.overallOptimal.lengthMeters.toFixed(3)} m
-  Internal Diameter: ${results.overallOptimal.internalDiameterMillimeters.toFixed(2)} mm
+Resultados:
+-----------
+Dimensiones Óptimas Generales:
+  Longitud: ${results.overallOptimal.lengthMeters.toFixed(3)} m
+  Diámetro Interno: ${results.overallOptimal.internalDiameterMillimeters.toFixed(2)} mm
 `;
 
   if (results.selectedDiameterCalculation && inputs.selectedCapillaryTubeInternalDiameterMillimeters) {
     content += `
-For User Selected Diameter (${results.selectedDiameterCalculation.inputDiameterMillimeters.toFixed(2)} mm):
-  Calculated Optimal Length: ${results.selectedDiameterCalculation.optimalLengthMeters.toFixed(3)} m
+Para Diámetro Seleccionado por Usuario (${results.selectedDiameterCalculation.inputDiameterMillimeters.toFixed(2)} mm):
+  Longitud Óptima Calculada: ${results.selectedDiameterCalculation.optimalLengthMeters.toFixed(3)} m
 `;
   }
 
   content += `
-Calculation Details:
---------------------
+Detalles del Cálculo:
+---------------------
 ${results.calculationDetails}
   `.trim();
 
   const blob = new Blob([content.replace(/\n{3,}/g, '\n\n')], { type: 'text/plain;charset=utf-8' }); // Replace triple newlines
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = 'capillary-calc-results.txt';
+  link.download = 'resultados-calculadora-capilar.txt';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
