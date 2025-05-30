@@ -8,11 +8,10 @@
  * This file defines a Genkit flow to calculate:
  * 1. The overall optimal capillary tube dimensions (length and diameter).
  * 2. If a specific diameter is provided by the user, the optimal length for that diameter.
- * All calculations consider the specified temperature range.
+ * All calculations consider the specified temperature range and a fixed ambient temperature of 35°C.
  *
  * @exports calculateCapillaryTubeDimensions - The function to trigger the calculation flow.
  * @exports CalculateCapillaryTubeOutput - The output type for the calculation.
- * @exports CalculateCapillaryTubeInputSchema - The Zod schema for the input (defined in @/lib/schemas).
  */
 
 import {ai} from '@/ai/genkit';
@@ -37,27 +36,29 @@ Calcularás las dimensiones del tubo capilar para un sistema de refrigeración.
 Entradas:
 Potencia del Compresor: {{{compressorPowerWatts}}} vatios
 Tipo de Refrigerante: {{{refrigerantType}}}
-Rango de Temperatura: {{{temperatureRange}}} (donde 'refrigeracion' significa 0°C a 5°C y 'congelacion' significa -18°C a -25°C)
+Rango de Temperatura de Operación: {{{temperatureRange}}} (donde 'refrigeracion' significa 0°C a 5°C y 'congelacion' significa -18°C a -25°C)
 {{#if selectedCapillaryTubeInternalDiameterMillimeters}}
 Diámetro Interno Seleccionado por el Usuario: {{{selectedCapillaryTubeInternalDiameterMillimeters}}} mm
 {{/if}}
 
-Cálculos:
-DEBES considerar el Rango de Temperatura especificado en todos tus cálculos.
+Consideraciones Adicionales:
+DEBES considerar una temperatura ambiente de 35°C para todos los cálculos.
+DEBES considerar el Rango de Temperatura de Operación especificado en todos tus cálculos.
 
+Cálculos:
 1.  **Dimensiones Óptimas Generales:**
     Calcula la longitud (en metros) y el diámetro interno (en milímetros) óptimos generales del tubo capilar.
     Rellena el objeto \`overallOptimal\` en la salida con \`lengthMeters\` y \`internalDiameterMillimeters\`.
 
 {{#if selectedCapillaryTubeInternalDiameterMillimeters}}
 2.  **Longitud para el Diámetro Seleccionado:**
-    Dado el Diámetro Interno Seleccionado por el Usuario de {{{selectedCapillaryTubeInternalDiameterMillimeters}}} mm, calcula la longitud óptima del tubo capilar (en metros) para ESTE diámetro específico, considerando el Rango de Temperatura.
+    Dado el Diámetro Interno Seleccionado por el Usuario de {{{selectedCapillaryTubeInternalDiameterMillimeters}}} mm, calcula la longitud óptima del tubo capilar (en metros) para ESTE diámetro específico.
     Rellena el objeto \`selectedDiameterCalculation\` en la salida con esta \`optimalLengthMeters\` y establece \`inputDiameterMillimeters\` a {{{selectedCapillaryTubeInternalDiameterMillimeters}}}.
 {{else}}
     <!-- Si el usuario no seleccionó un diámetro específico, el campo 'selectedDiameterCalculation' en el JSON de salida debe omitirse. No lo incluyas. -->
 {{/if}}
 
-Proporciona una explicación detallada del proceso de cálculo en el campo \`calculationDetails\`. Esta explicación DEBE estar en ESPAÑOL y reflejar cómo el Rango de Temperatura influyó en los cálculos. Si se proporcionó un diámetro seleccionado por el usuario, los detalles deben cubrir los cálculos tanto para las dimensiones óptimas generales como para las dimensiones del diámetro seleccionado por el usuario. De lo contrario, solo explica el cálculo óptimo general. Sé conciso.
+Proporciona una explicación detallada del proceso de cálculo en el campo \`calculationDetails\`. Esta explicación DEBE estar en ESPAÑOL y reflejar cómo el Rango de Temperatura de Operación y la temperatura ambiente de 35°C influyeron en los cálculos. Si se proporcionó un diámetro seleccionado por el usuario, los detalles deben cubrir los cálculos tanto para las dimensiones óptimas generales como para las dimensiones del diámetro seleccionado por el usuario. De lo contrario, solo explica el cálculo óptimo general. Sé conciso.
 
 Asegúrate de que la salida sea un JSON válido que coincida con el esquema.
 `,
@@ -101,4 +102,3 @@ const calculateCapillaryTubeFlow = ai.defineFlow(
     return output;
   }
 );
-

@@ -22,11 +22,12 @@ Entradas:
 ---------
 Potencia del Compresor: ${inputs.compressorPowerWatts} W
 Tipo de Refrigerante: ${inputs.refrigerantType.toUpperCase()}
-Rango de Temperatura: ${temperatureRangeText}
+Rango de Temperatura de Operación: ${temperatureRangeText}
+Temperatura Ambiente Asumida para Cálculo: 35°C
 `;
 
   if (inputs.selectedCapillaryTubeInternalDiameterMillimeters) {
-    content += `Diámetro Seleccionado por Usuario: ${inputs.selectedCapillaryTubeInternalDiameterMillimeters.toFixed(2)} mm\n`;
+    content += `Diámetro Interno Seleccionado por Usuario: ${inputs.selectedCapillaryTubeInternalDiameterMillimeters.toFixed(2)} mm\n`;
   }
 
   content += `
@@ -45,8 +46,8 @@ Para Diámetro Seleccionado por Usuario (${results.selectedDiameterCalculation.i
   }
 
   content += `
-Detalles del Cálculo:
----------------------
+Detalles del Cálculo (considerando temp. ambiente de 35°C):
+-----------------------------------------------------------
 ${results.calculationDetails}
   `.trim();
 
