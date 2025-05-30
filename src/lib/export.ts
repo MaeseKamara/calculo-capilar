@@ -6,6 +6,14 @@ export function exportCalculationResults(
   inputs: CalculateCapillaryTubeInput,
   results: CalculateCapillaryTubeOutput
 ): void {
+  let temperatureRangeText = '';
+  if (inputs.temperatureRange === 'refrigeracion') {
+    temperatureRangeText = 'Refrigeración (0°C a 5°C)';
+  } else if (inputs.temperatureRange === 'congelacion') {
+    temperatureRangeText = 'Congelación (-18°C a -25°C)';
+  }
+
+
   let content = `
 Resultados de Calculadora Capilar
 ==================================
@@ -14,6 +22,7 @@ Entradas:
 ---------
 Potencia del Compresor: ${inputs.compressorPowerWatts} W
 Tipo de Refrigerante: ${inputs.refrigerantType.toUpperCase()}
+Rango de Temperatura: ${temperatureRangeText}
 `;
 
   if (inputs.selectedCapillaryTubeInternalDiameterMillimeters) {
@@ -41,7 +50,7 @@ Detalles del Cálculo:
 ${results.calculationDetails}
   `.trim();
 
-  const blob = new Blob([content.replace(/\n{3,}/g, '\n\n')], { type: 'text/plain;charset=utf-8' }); // Replace triple newlines
+  const blob = new Blob([content.replace(/\n{3,}/g, '\n\n')], { type: 'text/plain;charset=utf-8' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
   link.download = 'resultados-calculadora-capilar.txt';

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { exportCalculationResults } from '@/lib/export';
-import { Download, Ruler, CircleDot, FileText, ThermometerSnowflake } from 'lucide-react';
+import { Download, Ruler, CircleDot, FileText, ThermometerSnowflake, Thermometer } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 interface ResultsDisplayProps {
@@ -73,17 +73,22 @@ export function ResultsDisplay({ results, inputs, isLoading }: ResultsDisplayPro
       exportCalculationResults(inputs, results);
     }
   };
+  
+  const TemperatureIcon = inputs.temperatureRange === 'congelacion' ? ThermometerSnowflake : Thermometer;
+
 
   return (
     <Card className="w-full shadow-lg">
       <CardHeader>
         <CardTitle className="text-2xl">Resultados del Cálculo</CardTitle>
-        <CardDescription>Dimensiones basadas en tus entradas.</CardDescription>
+        <CardDescription>
+          Dimensiones basadas en tus entradas (Rango: {inputs.temperatureRange === 'refrigeracion' ? 'Refrigeración 0/5°C' : 'Congelación -18/-25°C'}).
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
           <h3 className="text-lg font-semibold mb-2 flex items-center">
-            <ThermometerSnowflake className="mr-2 h-5 w-5 text-accent" />
+            <TemperatureIcon className="mr-2 h-5 w-5 text-accent" />
             Dimensiones Óptimas Generales
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -109,7 +114,7 @@ export function ResultsDisplay({ results, inputs, isLoading }: ResultsDisplayPro
             <Separator />
             <div>
               <h3 className="text-lg font-semibold mb-2 flex items-center">
-                <ThermometerSnowflake className="mr-2 h-5 w-5 text-accent" />
+                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-ruler mr-2 text-accent"><path d="M20.42 4.58a2.1 2.1 0 0 0-2.92 0L4.58 17.5a2.06 2.06 0 0 0 0 2.92 2.06 2.06 0 0 0 2.92 0L17.5 7.5a2.1 2.1 0 0 0 0-2.92Zm0 0L16 3m4.42 1.58L19 6M3 16l4 4M16 3l-1.5 1.5M7.5 17.5L6 19M17.5 7.5l-1.5 1.5"/></svg>
                 Para Tu Diámetro Seleccionado ({inputs.selectedCapillaryTubeInternalDiameterMillimeters.toFixed(2)} mm)
               </h3>
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
