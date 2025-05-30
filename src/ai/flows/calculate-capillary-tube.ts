@@ -5,32 +5,18 @@
 /**
  * @fileOverview Capillary tube dimension calculation flow.
  *
- * This file defines a Genkit flow to calculate the optimal capillary tube dimensions for a refrigeration system
- * based on compressor power and refrigerant type.
+ * This file defines a Genkit flow to calculate:
+ * 1. The overall optimal capillary tube dimensions (length and diameter).
+ * 2. If a specific diameter is provided by the user, the optimal length for that diameter.
  *
  * @exports calculateCapillaryTubeDimensions - The function to trigger the calculation flow.
  * @exports CalculateCapillaryTubeOutput - The output type for the calculation.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
-import type { CalculateCapillaryTubeInput } from '@/lib/schemas';
-import { CalculateCapillaryTubeInputSchema } from '@/lib/schemas';
+import type { CalculateCapillaryTubeInput, CalculateCapillaryTubeOutput } from '@/lib/schemas';
+import { CalculateCapillaryTubeInputSchema, CalculateCapillaryTubeOutputSchema } from '@/lib/schemas';
 
-
-const CalculateCapillaryTubeOutputSchema = z.object({
-  capillaryTubeLengthMeters: z
-    .number()
-    .describe('Optimal capillary tube length in meters.'),
-  capillaryTubeInternalDiameterMillimeters: z
-    .number()
-    .describe('Optimal capillary tube internal diameter in millimeters.'),
-  calculationDetails: z.string().describe('Details of the calculation process.'),
-});
-
-export type CalculateCapillaryTubeOutput = z.infer<
-  typeof CalculateCapillaryTubeOutputSchema
->;
 
 export async function calculateCapillaryTubeDimensions(
   input: CalculateCapillaryTubeInput
@@ -44,14 +30,30 @@ const prompt = ai.definePrompt({
   output: {schema: CalculateCapillaryTubeOutputSchema},
   prompt: `You are an expert refrigeration engineer.
 
-You will calculate the optimal capillary tube dimensions (length in meters and internal diameter in millimeters) for a refrigeration system.
+You will calculate capillary tube dimensions for a refrigeration system.
 
-Use the following information:
-
+Inputs:
 Compressor Power: {{{compressorPowerWatts}}} watts
 Refrigerant Type: {{{refrigerantType}}}
+{{#if selectedCapillaryTubeInternalDiameterMillimeters}}
+User Selected Internal Diameter: {{{selectedCapillaryTubeInternalDiameterMillimeters}}} mm
+{{/if}}
 
-Provide a detailed explanation of the calculation process and the assumptions made.  Be concise.
+Calculations:
+
+1.  **Overall Optimal Dimensions:**
+    Calculate the overall optimal capillary tube length (in meters) and internal diameter (in millimeters).
+    Populate the \`overallOptimal\` object in the output with \`lengthMeters\` and \`internalDiameterMillimeters\`.
+
+{{#if selectedCapillaryTubeInternalDiameterMillimeters}}
+2.  **Length for Selected Diameter:**
+    Given the User Selected Internal Diameter of {{{selectedCapillaryTubeInternalDiameterMillimeters}}} mm, calculate the optimal capillary tube length (in meters) for THIS specific diameter.
+    Populate the \`selectedDiameterCalculation\` object in the output with this \`optimalLengthMeters\` and set \`inputDiameterMillimeters\` to {{{selectedCapillaryTubeInternalDiameterMillimeters}}}.
+{{else}}
+    <!-- If no specific diameter was selected by the user, the 'selectedDiameterCalculation' field in the output JSON should be omitted. Do not include it. -->
+{{/if}}
+
+Provide a detailed explanation of the calculation process in the \`calculationDetails\` field. If a user-selected diameter was provided, the details should cover calculations for both the overall optimal dimensions and the dimensions for the user-selected diameter. Otherwise, just explain the overall optimal calculation. Be concise.
 
 Ensure the output is valid JSON matching the schema.
 `,
@@ -81,7 +83,6 @@ const calculateCapillaryTubeFlow = ai.defineFlow(
         if (topCandidate.finishMessage) {
           reasonMessage += ` Finish Message: "${topCandidate.finishMessage}".`;
         }
-        // Check for safety ratings if they exist and caused blocking
         if (topCandidate.safetyRatings && topCandidate.safetyRatings.some(r => r.blocked)) {
             const blockedCategories = topCandidate.safetyRatings
                 .filter(rating => rating.blocked)
@@ -96,4 +97,3 @@ const calculateCapillaryTubeFlow = ai.defineFlow(
     return output;
   }
 );
-

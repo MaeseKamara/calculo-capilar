@@ -7,10 +7,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CalculateCapillaryTubeInputSchema, type CalculateCapillaryTubeInput } from '@/lib/schemas';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription as FormDesc, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Zap, FlaskConical, Loader2 } from 'lucide-react';
+import { Zap, FlaskConical, Loader2, ThermometerSnowflake } from 'lucide-react';
 
 interface CapillaryCalcFormProps {
   onSubmit: (data: CalculateCapillaryTubeInput) => Promise<void>;
@@ -25,6 +25,7 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
     defaultValues: {
       compressorPowerWatts: 100,
       refrigerantType: 'r134a',
+      selectedCapillaryTubeInternalDiameterMillimeters: undefined,
     },
   });
 
@@ -47,10 +48,10 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
                     Compressor Power (Watts)
                   </FormLabel>
                   <FormControl>
-                    <Input 
-                      type="number" 
-                      placeholder="e.g., 150" 
-                      {...field} 
+                    <Input
+                      type="number"
+                      placeholder="e.g., 150"
+                      {...field}
                       onChange={e => field.onChange(parseFloat(e.target.value))}
                       className="text-base"
                     />
@@ -82,6 +83,40 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="selectedCapillaryTubeInternalDiameterMillimeters"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center">
+                    <ThermometerSnowflake className="mr-2 h-5 w-5 text-primary" />
+                    Selected Capillary Diameter (mm) (Optional)
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="e.g., 0.8"
+                      {...field}
+                      onChange={e => {
+                        const value = e.target.value;
+                        if (value === '') {
+                          field.onChange(undefined);
+                        } else {
+                          const numValue = parseFloat(value);
+                          field.onChange(isNaN(numValue) ? undefined : numValue);
+                        }
+                      }}
+                      className="text-base"
+                      step="0.01"
+                    />
+                  </FormControl>
+                  <FormDesc>
+                    If you have a specific capillary tube diameter, enter it here. The AI will calculate the optimal length for it.
+                  </FormDesc>
                   <FormMessage />
                 </FormItem>
               )}
