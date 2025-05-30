@@ -94,17 +94,17 @@ export function ResultsDisplay({ results, inputs, isLoading }: ResultsDisplayPro
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <h4 className="flex items-center text-sm font-medium text-muted-foreground mb-1">
-                <Ruler className="mr-2 h-4 w-4 text-primary" />
-                Longitud Óptima
-              </h4>
-              <p className="text-xl font-semibold">{results.overallOptimal.lengthMeters.toFixed(3)} m</p>
-            </div>
-            <div>
-              <h4 className="flex items-center text-sm font-medium text-muted-foreground mb-1">
                 <CircleDot className="mr-2 h-4 w-4 text-primary" />
                 Diámetro Interno Óptimo
               </h4>
               <p className="text-xl font-semibold">{results.overallOptimal.internalDiameterMillimeters.toFixed(2)} mm</p>
+            </div>
+            <div>
+              <h4 className="flex items-center text-sm font-medium text-muted-foreground mb-1">
+                <Ruler className="mr-2 h-4 w-4 text-primary" />
+                Longitud Óptima
+              </h4>
+              <p className="text-xl font-semibold">{results.overallOptimal.lengthMeters.toFixed(3)} m</p>
             </div>
           </div>
         </div>
