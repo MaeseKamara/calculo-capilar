@@ -64,7 +64,36 @@ const calculateCapillaryTubeFlow = ai.defineFlow(
     outputSchema: CalculateCapillaryTubeOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    const response = await prompt(input); // response is GenerateResponse<CalculateCapillaryTubeOutput>
+    const output = response.output;     // output is CalculateCapillaryTubeOutput | null
+
+    if (!output) {
+      console.error(
+        'Genkit prompt did not return a valid output. Full response:',
+        JSON.stringify(response, null, 2)
+      );
+      let reasonMessage = 'Model did not produce a valid output matching the schema.';
+      if (response.candidates && response.candidates.length > 0) {
+        const topCandidate = response.candidates[0];
+        if (topCandidate.finishReason && topCandidate.finishReason !== 'STOP' && topCandidate.finishReason !== 'UNKNOWN' && topCandidate.finishReason !== 'UNSPECIFIED') {
+          reasonMessage += ` Finish Reason: ${topCandidate.finishReason}.`;
+        }
+        if (topCandidate.finishMessage) {
+          reasonMessage += ` Finish Message: "${topCandidate.finishMessage}".`;
+        }
+        // Check for safety ratings if they exist and caused blocking
+        if (topCandidate.safetyRatings && topCandidate.safetyRatings.some(r => r.blocked)) {
+            const blockedCategories = topCandidate.safetyRatings
+                .filter(rating => rating.blocked)
+                .map(rating => rating.category);
+            if (blockedCategories.length > 0) {
+                reasonMessage += ` Content blocked due to safety categories: ${blockedCategories.join(', ')}.`;
+            }
+        }
+      }
+      throw new Error(reasonMessage);
+    }
+    return output;
   }
 );
+
