@@ -52,7 +52,12 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
                       type="number"
                       placeholder="e.g., 150"
                       {...field}
-                      onChange={e => field.onChange(parseFloat(e.target.value))}
+                      onChange={e => {
+                        const value = e.target.value;
+                        // Allow clearing the input, which parseFloat would turn to NaN
+                        // Zod validation will catch empty or non-positive values
+                        field.onChange(value === '' ? undefined : parseFloat(value));
+                      }}
                       className="text-base"
                     />
                   </FormControl>
@@ -101,13 +106,14 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
                       type="number"
                       placeholder="e.g., 0.8"
                       {...field}
+                      value={field.value === undefined ? '' : field.value} // Ensure value is never undefined for the input element
                       onChange={e => {
                         const value = e.target.value;
                         if (value === '') {
-                          field.onChange(undefined);
+                          field.onChange(undefined); // Inform react-hook-form it's undefined
                         } else {
                           const numValue = parseFloat(value);
-                          field.onChange(isNaN(numValue) ? undefined : numValue);
+                          field.onChange(isNaN(numValue) ? undefined : numValue); // Store number or undefined
                         }
                       }}
                       className="text-base"
