@@ -27,7 +27,7 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
   const form = useForm<CalculateCapillaryTubeInput>({
     resolver: zodResolver(CalculateCapillaryTubeInputSchema),
     defaultValues: {
-      compressorPowerWatts: 100,
+      compressorPowerWatts: undefined, // Changed from 100 to undefined
       refrigerantType: 'r134a',
       temperatureRange: 'refrigeracion',
       selectedCapillaryTubeInternalDiameterMillimeters: undefined,
@@ -60,6 +60,7 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
                       value={field.value === undefined ? '' : field.value}
                       onChange={e => {
                         const value = e.target.value;
+                        // Allow clearing the input, Zod will handle validation for required
                         field.onChange(value === '' ? undefined : parseFloat(value));
                       }}
                       className="text-base"
@@ -103,8 +104,8 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
                 <FormItem>
                   <FormLabel className="flex items-center">
                      {/* Dynamically render icon based on selected value */}
-                    {field.value === 'congelacion' ? 
-                      <ThermometerSnowflake className="mr-2 h-5 w-5 text-primary" /> : 
+                    {field.value === 'congelacion' ?
+                      <ThermometerSnowflake className="mr-2 h-5 w-5 text-primary" /> :
                       <Thermometer className="mr-2 h-5 w-5 text-primary" />
                     }
                     Rango de Temperatura de Operación
@@ -148,10 +149,10 @@ export function CapillaryCalcForm({ onSubmit, isLoading }: CapillaryCalcFormProp
                       onChange={e => {
                         const value = e.target.value;
                         if (value === '') {
-                          field.onChange(undefined); 
+                          field.onChange(undefined);
                         } else {
                           const numValue = parseFloat(value);
-                          field.onChange(isNaN(numValue) ? undefined : numValue); 
+                          field.onChange(isNaN(numValue) ? undefined : numValue);
                         }
                       }}
                       className="text-base"
